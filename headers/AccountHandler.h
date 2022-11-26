@@ -1,6 +1,6 @@
 #ifndef ACCOUNT_HANDLER_H
 #define ACCOUNT_HANDLER_H
-#include "Bank.h"
+#include "BankCommon.h"
 #include "Account.h"
 #include "SavingAccount.h"
 #include "HighCreditAccount.h"
@@ -11,6 +11,8 @@ class AccountHandler
 private:
 	Account* m_accArr[MAX_ACCOUNTS];
 	int m_accNum;
+
+	int GetAccIdx(int id) const;
 public:
 	AccountHandler();
 	~AccountHandler();

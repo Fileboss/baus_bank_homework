@@ -1,9 +1,9 @@
 #include"SavingAccount.h"
-#include<iostream>
-using namespace std;
+
 
 SavingAccount::SavingAccount(int ID, int balance, char* cusName, int interest)
 	: Account(ID, balance, cusName), m_interest{ interest }
+	// Call the Account constructor and initialize the interest
 {
 }
 

@@ -1,7 +1,5 @@
-#include <iostream>
 #include "Account.h"
-using namespace std;
-
+ 
 Account::Account(int ID, int balance, char* cusName)
 	: m_accID{ ID }, m_balance{ balance }
 {
@@ -37,6 +35,7 @@ void Account::deposit(int amount)
 int Account::withdraw(int amount) {
 	if (m_balance < 0 || amount > m_balance)
 	{
+		// If the balance is negative or the amount is greater than the balance, the withdraw is not possible
 		return -1;
 	}
 	m_balance -= amount;

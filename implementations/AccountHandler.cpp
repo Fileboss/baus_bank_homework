@@ -1,18 +1,31 @@
 #include "AccountHandler.h"
-using namespace std;
 
 AccountHandler::AccountHandler()
 	: m_accNum{ 0 }
 {
 }
+
  
 AccountHandler::~AccountHandler()
 {
 	delete[] m_accArr;
 }
 
+int AccountHandler::GetAccIdx(int id) const
+{
+	for (int i = 0; i < m_accNum; i++)
+	{
+		if (m_accArr[i]->getAccID() == id)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
 void AccountHandler::ShowMenu() const
 {
+	// Show the menu
 	cout << "-----Menu-----" << endl;
 	cout << "1. Open an account" << endl;
 	cout << "2. Deposit" << endl;
@@ -35,10 +48,10 @@ void AccountHandler::MakeAccount()
 	switch (choice)
 	{
 	case 1:
-		MakeSavingAccount();
+		MakeSavingAccount(); // Call the MakeSavingAccount function
 		break;
 	case 2:
-		MakeHighCreditAccount();
+		MakeHighCreditAccount(); // Call the MakeHighCreditAccount function
 		break;
 	default:
 		cout << "Invalid selection" << endl;
@@ -55,17 +68,14 @@ void AccountHandler::DepositMoney()
 	cin >> id;
 	cout << "Amount: ";
 	cin >> money;
-
-	for (int i = 0; i < m_accNum; i++)
+	
+	int idx = GetAccIdx(id);
+	if (idx == -1)
 	{
-		if (m_accArr[i]->getAccID() == id)
-		{
-			m_accArr[i]->deposit(money);
-			cout << "Deposit complete." << endl << endl;
-			return;
-		}
+		cout << "Invalid account ID" << endl;
+		return;
 	}
-	cout << "Invalid ID" << endl << endl;
+	m_accArr[idx]->deposit(money); // Calls the corresponding deposit function, because it is a virtual function
 }
 
 void AccountHandler::WithdrawMoney()
@@ -78,20 +88,24 @@ void AccountHandler::WithdrawMoney()
 	cout << "Amount: ";
 	cin >> money;
 
-	for (int i = 0; i < m_accNum; i++)
+	int idx = GetAccIdx(id); // Get the index of the account
+
+	if (idx == -1) // If the index is -1, it means that the account does not exist
 	{
-		if (m_accArr[i]->getAccID() == id)
-		{
-			if (m_accArr[i]->withdraw(money) == -1)
-			{
-				cout << "Insufficient balance." << endl << endl;
-				return;
-			}
-			cout << "Withdraw complete." << endl << endl;
-			return;
-		}
+		cout << "Invalid account ID" << endl;
+		return;
 	}
-	cout << "Invalid ID" << endl << endl;
+
+	int amount = m_accArr[idx]->withdraw(money);
+
+	if (amount == -1) // If the amount is -1, it means that the account does not have enough money
+	{
+		cout << "Insufficient balance" << endl;
+	}
+	else
+	{
+		cout << "Withdrawal amount: " << amount << endl;
+	}
 }
 
 void AccountHandler::ShowAllAccInfo() const
@@ -144,6 +158,10 @@ void AccountHandler::MakeHighCreditAccount()
 	cout << "Special rate (A: 7%, B: 4%, C: 2%): ";
 	cin >> rate;
 
+	// put rate to upper case so user can alo input a, b or c
+	rate = toupper(rate);
+	
+	// Set the special rate depending on the input Character
 	switch (rate)
 	{
 	case 'A':
@@ -157,7 +175,7 @@ void AccountHandler::MakeHighCreditAccount()
 		break;
 	default:
 		cout << "Invalid selection" << endl;
-		break;
+		return;
 	}
 
 	m_accArr[m_accNum++] = new HighCreditAccount(id, balance, name, interest, special);
