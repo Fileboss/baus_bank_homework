@@ -47,3 +47,6 @@ For HighCreditAccount:
     	Account::deposit(amount * (m_specialInterestRate / 100.0));
     }
 
+### Demo
+
+![enter image description here](http://image.noelshack.com/fichiers/2022/47/6/1669438492-demo.png)
